@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nick Coma — Portfolio Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --black:#000;
+  --near-black:#0a0a0a;
+  --dark:#161616;
+  --white:#fff;
+  --cyan:#FF0090;
+  --red:#ff462e;
+  --green:#14c700;
+  --grey:#888;
+  --font-display:'Inter',Helvetica,Arial,sans-serif;
+  --font-body:'Inter',Helvetica,Arial,sans-serif;
+  --font-title:'Inter',Helvetica,Arial,sans-serif;
+}
+
+html{scroll-behavior:smooth;overflow:hidden}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--font-body);
+  overflow:hidden;
+  height:100vh;
+  width:100vw;
+  cursor:none;
+}
+
+/* custom cursor */
+.cursor{
+  position:fixed;
+  width:20px;height:20px;
+  border:2px solid var(--cyan);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:10000;
+  transition:transform .15s ease,opacity .15s ease,border-color .2s;
+  mix-blend-mode:difference;
+}
+.cursor-dot{
+  position:fixed;
+  width:4px;height:4px;
+  background:var(--cyan);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:10001;
+}
+
+/* grain overlay */
+.grain{
+  position:fixed;inset:0;
+  z-index:9998;
+  pointer-events:none;
+  opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat:repeat;
+  background-size:150px;
+}
+
+/* progress bar */
+.progress-bar{
+  position:fixed;top:0;left:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--cyan),var(--red));
+  z-index:9999;
+  transition:width .6s cubic-bezier(.22,1,.36,1);
+}
+
+/* slide counter */
+.slide-counter{
+  position:fixed;
+  bottom:40px;right:50px;
+  font-family:var(--font-display);
+  font-size:14px;
+  letter-spacing:3px;
+  color:var(--grey);
+  z-index:9999;
+  font-weight:600;
+  transition:opacity .3s;
+}
+.slide-counter .current{color:var(--white);font-size:18px}
+
+/* nav dots */
+.nav-dots{
+  position:fixed;right:30px;top:50%;
+  transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:14px;
+  z-index:9999;
+}
+.nav-dot{
+  width:10px;height:10px;
+  border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.3);
+  background:transparent;
+  cursor:none;
+  transition:all .4s cubic-bezier(.22,1,.36,1);
+  position:relative;
+}
+.nav-dot.active{
+  border-color:var(--cyan);
+  background:var(--cyan);
+  box-shadow:0 0 12px rgba(0,153,255,.4);
+  transform:scale(1.3);
+}
+.nav-dot:hover{border-color:var(--white)}
+
+/* slide container */
+.deck{position:relative;width:100vw;height:100vh}
+.slide{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .8s cubic-bezier(.22,1,.36,1),visibility .8s,transform .8s cubic-bezier(.22,1,.36,1);
+  transform:scale(1.02);
+  overflow:hidden;
+}
+.slide.active{
+  opacity:1;visibility:visible;
+  transform:scale(1);
+  z-index:2;
+}
+.slide.prev{
+  opacity:0;
+  transform:scale(.96);
+}
+
+.slide-inner{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 80px;
+  position:relative;
+}
+
+/* ============ SLIDE 1: HERO ============ */
+.slide-hero{background:var(--black)}
+.slide-hero .hero-content{
+  text-align:center;
+  position:relative;z-index:2;
+}
+.hero-logo-img{
+  margin:0 auto 36px;
+}
+.hero-logo-img img{
+  width:clamp(280px,40vw,520px);
+  height:auto;
+  display:block;
+  margin:0 auto;
+  animation:titleReveal 1.2s cubic-bezier(.22,1,.36,1) both;
+}
+.slide-hero .subtitle{
+  font-family:var(--font-display);
+  font-size:clamp(14px,1.5vw,20px);
+  letter-spacing:6px;
+  text-transform:uppercase;
+  color:var(--cyan);
+  margin-top:20px;
+  font-weight:500;
+  animation:fadeUp .8s .6s cubic-bezier(.22,1,.36,1) both;
+}
+.slide-hero .hint{
+  position:absolute;
+  bottom:50px;left:50%;
+  transform:translateX(-50%);
+  font-size:12px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.3);
+  animation:pulse 2s ease-in-out infinite;
+}
+.slide-hero .line-accent{
+  width:60px;height:2px;
+  background:var(--cyan);
+  margin:24px auto 0;
+  animation:lineGrow .6s .8s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* animated bg mesh for hero */
+.hero-mesh{
+  position:absolute;inset:0;
+  overflow:hidden;
+}
+.hero-mesh .orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(100px);
+  opacity:.12;
+  animation:orbDrift 12s ease-in-out infinite;
+}
+.hero-mesh .orb:nth-child(1){
+  width:500px;height:500px;
+  background:var(--cyan);
+  top:-20%;left:-10%;
+  animation-delay:0s;
+}
+.hero-mesh .orb:nth-child(2){
+  width:400px;height:400px;
+  background:var(--red);
+  bottom:-15%;right:-5%;
+  animation-delay:-4s;
+  animation-duration:15s;
+}
+.hero-mesh .orb:nth-child(3){
+  width:300px;height:300px;
+  background:var(--green);
+  top:40%;right:20%;
+  animation-delay:-8s;
+  animation-duration:18s;
+  opacity:.06;
+}
+
+/* ============ SLIDE 2: ABOUT ============ */
+.slide-about .slide-inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+.about-photo{
+  width:100%;height:70vh;
+  border-radius:8px;
+  overflow:hidden;
+  position:relative;
+}
+.about-photo img{
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform 6s cubic-bezier(.22,1,.36,1);
+}
+.slide.active .about-photo img{transform:scale(1.05)}
+.about-photo::after{
+  content:'';position:absolute;inset:0;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;
+  pointer-events:none;
+}
+.about-text .label{
+  font-family:var(--font-display);
+  font-size:12px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--cyan);
+  font-weight:600;
+  margin-bottom:20px;
+}
+.about-text h2{
+  font-family:var(--font-display);
+  font-size:clamp(28px,3.5vw,48px);
+  font-weight:800;
+  line-height:1.1;
+  margin-bottom:24px;
+}
+.about-text .cyan-line{
+  width:50px;height:2px;
+  background:var(--cyan);
+  margin-bottom:28px;
+}
+.about-text p{
+  font-size:clamp(15px,1.2vw,17px);
+  line-height:1.8;
+  color:rgba(255,255,255,.7);
+  max-width:460px;
+}
+.about-text p+p{margin-top:16px}
+
+/* ============ SLIDE 3: ADVERTISING ============ */
+.slide-adv .slide-inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+  padding:80px;
+}
+.adv-images{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  padding-right:20px;
+  max-height:75vh;
+  justify-content:center;
+}
+.adv-images img{
+  width:75%;
+  max-height:38vh;
+  object-fit:cover;
+  border-radius:8px;
+  display:block;
+  transition:transform 6s cubic-bezier(.22,1,.36,1);
+}
+.adv-images img:first-child{
+  align-self:flex-start;
+}
+.adv-images img:last-child{
+  align-self:flex-end;
+}
+.slide.active .adv-images img{transform:scale(1.03)}
+.figma-btn{
+  display:inline-block;
+  margin-top:28px;
+  padding:12px 28px;
+  font-family:var(--font-display);
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--white);
+  text-decoration:none;
+  border:1.5px solid var(--cyan);
+  border-radius:6px;
+  transition:background .3s,color .3s;
+  cursor:none;
+}
+.figma-btn:hover{
+  background:var(--cyan);
+  color:var(--black);
+}
+.btn-row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:28px;
+}
+.btn-row .figma-btn{
+  margin-top:0;
+}
+.adv-content .label{
+  font-family:var(--font-display);
+  font-size:12px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--cyan);
+  font-weight:600;
+  margin-bottom:20px;
+}
+.adv-content h2{
+  font-family:var(--font-display);
+  font-size:clamp(28px,3.5vw,48px);
+  font-weight:800;
+  line-height:1.1;
+  margin-bottom:24px;
+}
+.adv-content .cyan-line{
+  width:50px;height:2px;
+  background:var(--cyan);
+  margin-bottom:28px;
+}
+.adv-content p{
+  font-size:clamp(15px,1.2vw,17px);
+  line-height:1.8;
+  color:rgba(255,255,255,.7);
+  max-width:700px;
+}
+.adv-content p+p{margin-top:16px}
+.adv-logos{width:100%}
+.logos-label{
+  font-size:12px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--grey);
+  margin-bottom:28px;
+  font-weight:500;
+}
+.logos-row{
+  display:flex;
+  align-items:center;
+  gap:50px;
+  flex-wrap:wrap;
+}
+.logo-item{
+  height:36px;
+  display:flex;align-items:center;
+  opacity:.7;
+  transition:opacity .3s;
+}
+.logo-item:hover{opacity:1}
+.logo-item img{
+  height:100%;
+  width:auto;
+  object-fit:contain;
+  filter:brightness(10);
+}
+
+/* (collab slide now uses .slide-adv layout) */
+
+/* (product slide removed, now uses .slide-adv layout) */
+
+/* (life slide now uses .slide-adv layout) */
+
+/* ============ SLIDE 8: CONTACT ============ */
+.slide-contact{background:var(--black)}
+.slide-contact .slide-inner{
+  flex-direction:column;
+  text-align:center;
+}
+.contact-skull{
+  width:50px;height:50px;
+  margin-bottom:40px;
+  opacity:.6;
+  animation:float 6s ease-in-out infinite;
+}
+.contact-skull svg{width:100%;height:100%}
+.slide-contact h2{
+  font-family:var(--font-title);
+  font-size:clamp(32px,5.5vw,72px);
+  letter-spacing:.03em;
+  line-height:.95;
+  font-weight:900;
+  margin-bottom:12px;
+  background:linear-gradient(90deg,var(--cyan),var(--red));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.slide-contact .contact-sub{
+  font-size:clamp(14px,1.2vw,18px);
+  color:rgba(255,255,255,.4);
+  letter-spacing:3px;
+  margin-bottom:50px;
+}
+.contact-links{
+  display:flex;gap:40px;
+  align-items:center;
+  margin-bottom:50px;
+}
+.contact-links a{
+  font-family:var(--font-display);
+  font-size:14px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--grey);
+  text-decoration:none;
+  transition:color .3s;
+  font-weight:600;
+  position:relative;
+}
+.contact-links a::after{
+  content:'';
+  position:absolute;bottom:-4px;left:0;
+  width:0;height:1.5px;
+  background:var(--cyan);
+  transition:width .4s cubic-bezier(.22,1,.36,1);
+}
+.contact-links a:hover{color:var(--white)}
+.contact-links a:hover::after{width:100%}
+.slide-contact .website{
+  font-family:var(--font-display);
+  font-size:clamp(12px,1vw,14px);
+  letter-spacing:5px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.2);
+  font-weight:600;
+}
+.slide-contact .contact-bg-mesh{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+}
+.slide-contact .contact-bg-mesh .c-orb{
+  position:absolute;border-radius:50%;
+  filter:blur(120px);
+  opacity:.08;
+  animation:orbDrift 14s ease-in-out infinite;
+}
+.slide-contact .contact-bg-mesh .c-orb:nth-child(1){
+  width:600px;height:600px;background:var(--cyan);
+  bottom:-30%;left:10%;
+}
+.slide-contact .contact-bg-mesh .c-orb:nth-child(2){
+  width:400px;height:400px;background:var(--red);
+  top:-20%;right:5%;animation-delay:-6s;
+}
+
+/* ============ OVERVIEW MODE ============ */
+.overview-modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.95);
+  z-index:9990;
+  display:none;
+  padding:60px;
+  overflow-y:auto;
+}
+.overview-modal.open{display:block}
+.overview-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  max-width:1200px;
+  margin:0 auto;
+}
+.overview-thumb{
+  aspect-ratio:16/9;
+  background:var(--dark);
+  border-radius:8px;
+  cursor:none;
+  overflow:hidden;
+  border:2px solid transparent;
+  transition:border-color .3s,transform .3s;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);
+  font-size:12px;
+  letter-spacing:2px;
+  color:var(--grey);
+  text-transform:uppercase;
+}
+.overview-thumb:hover{border-color:var(--cyan);transform:scale(1.04)}
+.overview-thumb.active-thumb{border-color:var(--cyan)}
+.overview-title{
+  font-family:var(--font-display);
+  font-size:12px;
+  letter-spacing:5px;
+  text-transform:uppercase;
+  color:var(--grey);
+  text-align:center;
+  margin-bottom:40px;
+  font-weight:600;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-20px) rotate(2deg)}
+}
+@keyframes titleReveal{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes lineGrow{
+  from{width:0}
+  to{width:60px}
+}
+@keyframes pulse{
+  0%,100%{opacity:.3}
+  50%{opacity:.8}
+}
+@keyframes orbDrift{
+  0%,100%{transform:translate(0,0)}
+  33%{transform:translate(30px,-40px)}
+  66%{transform:translate(-20px,20px)}
+}
+
+/* slide entrance animations */
+.slide.active .anim-up{
+  animation:fadeUp .7s cubic-bezier(.22,1,.36,1) both;
+}
+.slide.active .anim-up-d1{animation:fadeUp .7s .15s cubic-bezier(.22,1,.36,1) both}
+.slide.active .anim-up-d2{animation:fadeUp .7s .3s cubic-bezier(.22,1,.36,1) both}
+.slide.active .anim-up-d3{animation:fadeUp .7s .45s cubic-bezier(.22,1,.36,1) both}
+.slide.active .anim-up-d4{animation:fadeUp .7s .6s cubic-bezier(.22,1,.36,1) both}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1024px){
+  .slide-inner{padding:40px 50px}
+  .slide-about .slide-inner,
+  .slide-adv .slide-inner{
+    grid-template-columns:1fr;
+    gap:40px;
+    padding:40px 50px;
+  }
+  .about-photo{height:40vh}
+  .work-content{padding:40px 50px 60px}
+  .nav-dots{right:16px;gap:10px}
+  .nav-dot{width:8px;height:8px}
+  .slide-counter{bottom:20px;right:30px;font-size:12px}
+  .overview-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:768px){
+  body{cursor:auto}
+  .cursor,.cursor-dot{display:none}
+  .slide-inner{padding:30px 24px}
+  .slide-about .slide-inner{grid-template-columns:1fr}
+  .about-photo{height:35vh}
+  .work-content{padding:24px 24px 40px}
+  .work-content h2{font-size:28px}
+  .contact-links{flex-wrap:wrap;gap:20px;justify-content:center}
+  .nav-dots{display:none}
+  .slide-counter{bottom:16px;right:20px}
+  .overview-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .overview-modal{padding:30px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="grain"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slide-counter" id="slideCounter">
+  <span class="current">01</span> / <span>07</span>
+</div>
+
+<div class="nav-dots" id="navDots"></div>
+
+<!-- ==================== SLIDES ==================== -->
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: HERO -->
+  <section class="slide slide-hero active" data-index="0">
+    <div class="hero-mesh">
+      <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+    </div>
+    <div class="slide-inner">
+      <div class="hero-content">
+        <div class="hero-logo-img anim-up">
+          <img src="../transparent skull.png" alt="Nick Coma Logo">
+        </div>
+        <div class="subtitle anim-up-d2">Product Design Manager</div>
+        <div class="line-accent"></div>
+      </div>
+    </div>
+    <div class="hint">Scroll or press &rarr; to begin</div>
+  </section>
+
+  <!-- SLIDE 2: ABOUT -->
+  <section class="slide slide-about" data-index="1">
+    <div class="slide-inner">
+      <div class="about-photo anim-up">
+        <img src="../nickcoma-hp/t8BC2klzsm3TTCU0PvvY8HjYvQ.jpg.jpeg" alt="Nick Coma" loading="lazy">
+      </div>
+      <div class="about-text">
+        <div class="label anim-up">About</div>
+        <h2 class="anim-up-d1">I lead teams to create intuitive, user-focused digital experiences blending aesthetics and functionality.</h2>
+        <div class="cyan-line anim-up-d2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: ADVERTISING EXPERIENCE -->
+  <section class="slide slide-adv" data-index="2">
+    <div class="slide-inner">
+      <div class="adv-content">
+        <div class="label anim-up">Background</div>
+        <h2 class="anim-up-d1">Rooted in Advertising,<br>Driven by Data</h2>
+        <div class="cyan-line anim-up-d2"></div>
+        <p class="anim-up-d2">Before transitioning into product design, I spent years in the advertising industry crafting campaigns and brand experiences for some of the world's most recognizable names. That foundation in storytelling, user empathy, and visual communication informs everything I build today.</p>
+        <p class="anim-up-d3">From concept development and art direction to full-scale campaign launches, I led creative work across entertainment, streaming, and consumer brands. But I never relied on instinct alone. I consistently leaned on performance data, audience insights, and strategic frameworks to shape creative decisions, ensuring the work wasn't just beautiful but measurably effective. Across every team I've been on, I was the go-to person for digital innovation, always pushing to find new formats, platforms, and technologies before they became industry standard.</p>
+      </div>
+      <div class="adv-images anim-up-d2">
+        <img src="../ad page/TubiPresentation28229.webp" alt="Tubi Campaign" loading="lazy">
+        <img src="../ad page/22222.webp" alt="Knicks x Maker's Mark Campaign" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: COLLAB -->
+  <section class="slide slide-adv" data-index="3">
+    <div class="slide-inner">
+      <div class="adv-content">
+        <div class="label anim-up">Case Study</div>
+        <h2 class="anim-up-d1">Coachella, Stagecoach<br>&amp; Goldenvoice Redesigns</h2>
+        <div class="cyan-line anim-up-d2"></div>
+        <p class="anim-up-d2">Served as the lead UX/UI designer and brand creative behind the seasonal overhaul of Goldenvoice's flagship properties, including Coachella, Stagecoach, and the Goldenvoice parent site. Owned the end-to-end design process from brand strategy and visual identity through to responsive web execution, delivering cohesive digital experiences across the full festival portfolio.</p>
+        <p class="anim-up-d3">The partnership built during my time at Mondo Robot became so integral to Goldenvoice's creative workflow that when I moved on, the client chose to follow, a testament to the trust and creative rapport we'd built together.</p>
+        <div class="btn-row anim-up-d4">
+          <a href="https://www.figma.com/design/ExZEyQlWorVf9a5wduIQz4/Coachella-2024-Design?node-id=338-20732&t=Y0s65muJJUWyJHAx-1" target="_blank" rel="noopener" class="figma-btn">Coachella</a>
+          <a href="https://www.nickcoma.com/work/stagecoach" target="_blank" rel="noopener" class="figma-btn">Stagecoach</a>
+          <a href="https://www.figma.com/design/aX0MLsrXKlwf8Ey4p5c8Fl/Goldenvoice-Design?node-id=131-1355&t=iK1K0N1uEw4HMGlm-1" target="_blank" rel="noopener" class="figma-btn">Goldenvoice</a>
+        </div>
+      </div>
+      <div class="adv-images anim-up-d2">
+        <img src="../nickcoma-hp/I0KQEaY2bbtyYKrLfAF1xSqabIE.webp" alt="Coachella Festival" loading="lazy">
+        <img src="../nickcoma-hp/hYNqgGlnPnN2rEBBXsbwTVKddHw.jpg.jpeg" alt="Coachella" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: JOHNSON & JOHNSON -->
+  <section class="slide slide-adv" data-index="4">
+    <div class="slide-inner">
+      <div class="adv-content">
+        <div class="label anim-up">Case Study</div>
+        <h2 class="anim-up-d1">Johnson &amp; Johnson<br>PSC Command Center</h2>
+        <div class="cyan-line anim-up-d2"></div>
+        <p class="anim-up-d2">Designed the "Golden Thread" framework for Johnson & Johnson's Patient Support Center, a unified command center dashboard connecting patient journeys, operational workflows, and real-time analytics into a single product experience. Led product UI and strategy across a 12-week engagement, translating complex healthcare data into clear, actionable interfaces.</p>
+        <p class="anim-up-d3">Conducted stakeholder research, mapped end-to-end patient journeys, and delivered a modular dashboard system that gave leadership visibility into every stage of the support process, from intake through resolution.</p>
+        <div class="btn-row anim-up-d4">
+          <a href="https://www.figma.com/design/vN8eaBsd3MiXu92wDT2gKl/01---J-J---PSC-Command-Center?node-id=747-14273&t=8jlSgATZ1xgON2xo-1" target="_blank" rel="noopener" class="figma-btn">View in Figma</a>
+          <a href="https://www.figma.com/proto/vN8eaBsd3MiXu92wDT2gKl/01---J-J---PSC-Command-Center?page-id=14%3A3%3Fnode-id%3D14-245&viewport=406%2C157%2C0.13&t=grRCbIdn7BHrpAll-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=14%3A245&show-proto-sidebar=1&node-id=14-245" target="_blank" rel="noopener" class="figma-btn">View Prototype</a>
+        </div>
+      </div>
+      <div class="adv-images anim-up-d2">
+        <img src="../nickcoma-hp/WwOOfBzaqnNGPQm7W71CUNkJxY.jpg_1.jpeg" alt="J&J Presentation" loading="lazy">
+        <img src="../Overview.png" alt="J&J Dashboard" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: LIFE -->
+  <section class="slide slide-adv" data-index="5">
+    <div class="slide-inner">
+      <div class="adv-images anim-up" style="justify-content:center">
+        <img src="../nickcoma-hp/6PxO7oPrSri0aNgh6aUdkkgt74.jpg.png" alt="Waterskiing" loading="lazy" style="width:60%;max-height:70vh;aspect-ratio:3/4;align-self:center">
+      </div>
+      <div class="adv-content">
+        <div class="label anim-up">Beyond the Screen</div>
+        <h2 class="anim-up-d1">Life Outside<br>of Work</h2>
+        <div class="cyan-line anim-up-d2"></div>
+        <p class="anim-up-d2">I'm currently writing a fantasy novel and gearing up to start querying agents. When I'm not at my desk, you'll find me bouldering at the climbing gym, working through a problem on the wall the same way I work through a design challenge.</p>
+        <p class="anim-up-d3">Most recently, I became a father. It's been the most rewarding thing I've ever done, and it's given me a whole new perspective on patience, and empathy,. In the downtime, I'm a lifelong fan of video games, TV, and film. Storytelling in all its forms is what keeps me inspired.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: CONTACT -->
+  <section class="slide slide-contact" data-index="6">
+    <div class="contact-bg-mesh">
+      <div class="c-orb"></div><div class="c-orb"></div>
+    </div>
+    <div class="slide-inner">
+      <div class="contact-skull anim-up">
+        <svg viewBox="0 0 100 100" fill="white">
+          <circle cx="50" cy="42" r="34" fill="none" stroke="white" stroke-width="6"/>
+          <circle cx="38" cy="38" r="9" fill="white"/>
+          <circle cx="62" cy="38" r="9" fill="white"/>
+          <polygon points="50,50 44,60 56,60" fill="white"/>
+          <rect x="40" y="66" width="4" height="10" rx="1" fill="white"/>
+          <rect x="48" y="66" width="4" height="10" rx="1" fill="white"/>
+          <rect x="56" y="66" width="4" height="10" rx="1" fill="white"/>
+        </svg>
+      </div>
+      <h2 class="anim-up-d1">YOU'VE SEEN THE SLIDES.<br>NOW HIRE ME.</h2>
+      <div class="website anim-up-d4">www.nickcoma.com</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- OVERVIEW MODAL -->
+<div class="overview-modal" id="overviewModal">
+  <div class="overview-title">Slide Overview — Press ESC to close</div>
+  <div class="overview-grid" id="overviewGrid"></div>
+</div>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let transitioning = false;
+  let overviewOpen = false;
+
+  const progressBar = document.getElementById('progressBar');
+  const counterEl = document.getElementById('slideCounter');
+  const navDotsContainer = document.getElementById('navDots');
+  const overviewModal = document.getElementById('overviewModal');
+  const overviewGrid = document.getElementById('overviewGrid');
+  const cursor = document.getElementById('cursor');
+  const cursorDot = document.getElementById('cursorDot');
+
+  // build nav dots
+  for(let i=0;i<total;i++){
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i===0?' active':'');
+    dot.addEventListener('click',()=>goTo(i));
+    navDotsContainer.appendChild(dot);
+  }
+
+  // build overview thumbs
+  const slideNames = ['Hero','About','Advertising','Goldenvoice','J&J','Life','Contact'];
+  for(let i=0;i<total;i++){
+    const thumb = document.createElement('div');
+    thumb.className = 'overview-thumb' + (i===0?' active-thumb':'');
+    thumb.textContent = slideNames[i] || `Slide ${i+1}`;
+    thumb.addEventListener('click',()=>{goTo(i);closeOverview()});
+    overviewGrid.appendChild(thumb);
+  }
+
+  function updateUI(){
+    progressBar.style.width = ((current+1)/total*100)+'%';
+    counterEl.querySelector('.current').textContent = String(current+1).padStart(2,'0');
+    document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+    document.querySelectorAll('.overview-thumb').forEach((t,i)=>t.classList.toggle('active-thumb',i===current));
+  }
+
+  function goTo(index){
+    if(index===current||index<0||index>=total||transitioning) return;
+    transitioning = true;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('prev');
+    current = index;
+    slides[current].classList.add('active');
+    updateUI();
+    setTimeout(()=>{
+      slides.forEach((s,i)=>{if(i!==current) s.classList.remove('prev')});
+      transitioning = false;
+    },900);
+  }
+
+  function next(){goTo(current+1)}
+  function prev(){goTo(current-1)}
+
+  function openOverview(){
+    overviewOpen=true;
+    overviewModal.classList.add('open');
+  }
+  function closeOverview(){
+    overviewOpen=false;
+    overviewModal.classList.remove('open');
+  }
+
+  // keyboard
+  document.addEventListener('keydown',e=>{
+    if(overviewOpen){
+      if(e.key==='Escape') closeOverview();
+      return;
+    }
+    switch(e.key){
+      case 'ArrowRight':case 'ArrowDown':case ' ':e.preventDefault();next();break;
+      case 'ArrowLeft':case 'ArrowUp':e.preventDefault();prev();break;
+      case 'Escape':openOverview();break;
+      case 'f':case 'F':
+        if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+        else document.exitFullscreen();
+        break;
+    }
+  });
+
+  // scroll / wheel
+  let wheelTimeout;
+  document.addEventListener('wheel',e=>{
+    if(overviewOpen) return;
+    e.preventDefault();
+    if(wheelTimeout) return;
+    wheelTimeout=setTimeout(()=>{wheelTimeout=null},800);
+    if(e.deltaY>0) next(); else prev();
+  },{passive:false});
+
+  // touch swipe
+  let touchStartX=0,touchStartY=0;
+  document.addEventListener('touchstart',e=>{
+    touchStartX=e.touches[0].clientX;
+    touchStartY=e.touches[0].clientY;
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(overviewOpen) return;
+    const dx=e.changedTouches[0].clientX-touchStartX;
+    const dy=e.changedTouches[0].clientY-touchStartY;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50){
+      if(dx<0) next(); else prev();
+    } else if(Math.abs(dy)>50){
+      if(dy<0) next(); else prev();
+    }
+  },{passive:true});
+
+  // custom cursor
+  document.addEventListener('mousemove',e=>{
+    cursor.style.left=e.clientX-10+'px';
+    cursor.style.top=e.clientY-10+'px';
+    cursorDot.style.left=e.clientX-2+'px';
+    cursorDot.style.top=e.clientY-2+'px';
+  });
+  document.querySelectorAll('a,.nav-dot,.overview-thumb').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.transform='scale(2)';cursor.style.borderColor='#ff462e'});
+    el.addEventListener('mouseleave',()=>{cursor.style.transform='scale(1)';cursor.style.borderColor='var(--cyan)'});
+  });
+
+  updateUI();
+})();
+</script>
+</body>
+</html>
