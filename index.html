@@ -559,13 +559,28 @@ body{
 /* ============ RESPONSIVE ============ */
 @media(max-width:1024px){
   .slide-inner{padding:40px 50px}
-  .slide-about .slide-inner,
-  .slide-adv .slide-inner{
+  .slide-about .slide-inner{
     grid-template-columns:1fr;
-    gap:40px;
+    gap:30px;
     padding:40px 50px;
   }
-  .about-photo{height:40vh}
+  .slide-adv .slide-inner{
+    grid-template-columns:1fr;
+    gap:30px;
+    padding:40px 50px;
+    overflow-y:auto;
+  }
+  .about-photo{height:35vh}
+  .adv-images{
+    max-height:none;
+    flex-direction:row;
+    padding-right:0;
+  }
+  .adv-images img{
+    width:48%;
+    max-height:25vh;
+    align-self:center!important;
+  }
   .work-content{padding:40px 50px 60px}
   .nav-dots{right:16px;gap:10px}
   .nav-dot{width:8px;height:8px}
@@ -576,16 +591,77 @@ body{
 @media(max-width:768px){
   body{cursor:auto}
   .cursor,.cursor-dot{display:none}
-  .slide-inner{padding:30px 24px}
-  .slide-about .slide-inner{grid-template-columns:1fr}
-  .about-photo{height:35vh}
+  .slide-inner{padding:24px 20px}
+
+  /* hero */
+  .hero-logo-img img{width:clamp(200px,65vw,320px)}
+  .slide-hero .subtitle{font-size:12px;letter-spacing:4px}
+  .slide-hero .hint{bottom:30px;font-size:10px}
+
+  /* about */
+  .slide-about .slide-inner{
+    grid-template-columns:1fr;
+    gap:24px;
+    padding:30px 24px;
+    overflow-y:auto;
+  }
+  .about-photo{height:30vh}
+  .about-text h2{font-size:clamp(20px,5vw,28px)}
+
+  /* adv slides (advertising, j&j, goldenvoice, life) */
+  .slide-adv .slide-inner{
+    grid-template-columns:1fr;
+    gap:24px;
+    padding:30px 24px;
+    overflow-y:auto;
+    align-items:flex-start;
+    align-content:flex-start;
+  }
+  .adv-content h2{font-size:clamp(22px,5.5vw,32px)}
+  .adv-content p{font-size:14px;line-height:1.6}
+  .adv-images{
+    max-height:none;
+    flex-direction:row;
+    padding-right:0;
+    gap:10px;
+    order:-1;
+  }
+  .adv-images img{
+    width:48%;
+    max-height:20vh;
+    align-self:center!important;
+  }
+  /* single image on life slide */
+  .adv-images img[style*="aspect-ratio"]{
+    width:50%!important;
+    max-height:25vh!important;
+  }
+
+  /* buttons */
+  .figma-btn{
+    padding:10px 18px;
+    font-size:11px;
+    letter-spacing:1px;
+  }
+  .btn-row{gap:8px;margin-top:20px}
+
+  /* contact */
+  .slide-contact h2{font-size:clamp(28px,7vw,48px)}
+  .contact-links{flex-wrap:wrap;gap:16px;justify-content:center}
+  .slide-contact .website{font-size:11px;letter-spacing:3px}
+  .contact-skull{width:36px;height:36px;margin-bottom:24px}
+
+  /* nav */
+  .nav-dots{display:none}
+  .slide-counter{bottom:12px;right:16px;font-size:11px}
+
+  /* overview */
+  .overview-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .overview-modal{padding:20px}
+  .overview-title{font-size:10px;margin-bottom:24px}
+
   .work-content{padding:24px 24px 40px}
   .work-content h2{font-size:28px}
-  .contact-links{flex-wrap:wrap;gap:20px;justify-content:center}
-  .nav-dots{display:none}
-  .slide-counter{bottom:16px;right:20px}
-  .overview-grid{grid-template-columns:repeat(2,1fr);gap:12px}
-  .overview-modal{padding:30px}
 }
 </style>
 </head>
